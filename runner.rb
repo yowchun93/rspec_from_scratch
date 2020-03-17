@@ -13,7 +13,7 @@ def it(description, &block)
     block.call
     puts " #{GREEN}(ok)#{RESET}"
   rescue Exception => e
-    puts " #{RED}(ok)#{RESET}"
+    puts " #{RED}(fail)#{RESET}"
   end
 end
 
