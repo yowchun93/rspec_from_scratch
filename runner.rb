@@ -13,6 +13,8 @@ class Describe
     @lets = {}
   end
 
+  # instance_eval, runs the block in context of describe object
+  # instance_eval is mainly used to run blocks
   def run
     puts @description
     # @block.call
@@ -39,6 +41,7 @@ class It
   def run
     begin
       $stdout.write " - #{@description}"
+      # @block.call
       instance_eval(&@block)
       puts " #{GREEN}(ok)#{RESET}"
     rescue Exception => e
