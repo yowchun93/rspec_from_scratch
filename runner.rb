@@ -11,6 +11,7 @@ class Describe
     @description = description
     @block = block
     @lets = {}
+    @befores = []
   end
 
   # instance_eval, runs the block in context of describe object
@@ -22,26 +23,32 @@ class Describe
   end
 
   def it(description, &block)
-    It.new(description, block, @lets).run
+    It.new(description, block, @lets, @befores).run
   end
 
   def let(name, &block)
     @lets[name] = block
   end
+
+  def before(&block)
+    @befores << block
+  end
 end
 
 class It
-  def initialize(description, block, lets)
+  def initialize(description, block, lets, befores)
     @description = description
     @block = block
     @lets = lets
     @lets_cache = {}
+    @befores = befores
   end
 
   def run
     begin
       $stdout.write " - #{@description}"
       # @block.call
+      @befores.each { |block| instance_eval(&block) }
       instance_eval(&@block)
       puts " #{GREEN}(ok)#{RESET}"
     rescue Exception => e
