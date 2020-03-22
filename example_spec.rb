@@ -30,3 +30,11 @@ describe "let" do
     end.to raise_error(NameError)
   end
 end
+
+describe "before" do
+  before { @five = 5 }
+
+  it "should be visible inside the test" do
+    expect(@five).to eq 5
+  end
+end
