@@ -7,10 +7,10 @@ def describe(description, &block)
 end
 
 class Describe
-  def initialize(description, block)
+  def initialize(description, block, lets={})
     @description = description
     @block = block
-    @lets = {}
+    @lets = lets
     @befores = []
   end
 
@@ -20,6 +20,10 @@ class Describe
     puts @description
     # @block.call
     instance_eval(&@block) # check out why this works
+  end
+
+  def describe(description, &block)
+    Describe.new(description, block, @lets.dup).run
   end
 
   def it(description, &block)
@@ -73,7 +77,7 @@ class It
     Expectations::Error.new(exception_class)
   end
 
-  def method_missing(name)
+  def method_missing(name, *args)
     if @lets_cache.key?(name)
       @lets_cache.fetch(name)
     else
